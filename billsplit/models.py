@@ -10,15 +10,16 @@ class Expense(models.Model):
     description = models.TextField(verbose_name='Details', max_length=200)
     date = models.DateTimeField(verbose_name='Date', default=timezone.now)
     user = models.ForeignKey('AppUser', on_delete=models.CASCADE, null=False)
+    bill_image = models.ImageField(default="", upload_to='images', null=True)
 
     def __str__(self):
-        return self.date + "-" + self.amount
+        return str(self.date) + "-" + str(self.amount)
     
 
 class Group(models.Model):
     group_name = models.CharField(max_length=25, verbose_name='Group Name', blank=False)
     group_Description = models.TextField(verbose_name='Details', max_length=200)
-    members = models.ManyToManyField('AppUser', verbose_name=("members"), null=True)
+    members = models.ManyToManyField('AppUser', verbose_name=("members"), related_name='groups',null=True)
 
     def __str__(self):
         return self.group_name
@@ -32,10 +33,10 @@ class AppUser(models.Model):
         return self.user.username
     
     @receiver(post_save, sender=User)
-    def create_user_profile(sender, instance, created, **kwargs):
+    def create_user_profile(self, sender, instance, created, **kwargs):
         if created:
             AppUser.objects.create(user=instance)
 
     @receiver(post_save, sender=User)
-    def save_user_profile(sender, instance, **kwargs):
+    def save_user_profile(self, sender, instance, **kwargs):
         instance.app_user.save()
