@@ -31,7 +31,7 @@ class Group(models.Model):
     """ The Group model - represents the groups a user has created or is a member of """
     group_name = models.CharField(max_length=25, verbose_name='Group Name', blank=False)
     group_Description = models.TextField(verbose_name='Details', max_length=200)
-    members = models.ManyToManyField('AppUser', verbose_name=("members"), related_name='groups',null=True)
+    members = models.ManyToManyField('AppUser', verbose_name=("members"))
 
     def __str__(self):
         return self.group_name
@@ -46,11 +46,11 @@ class AppUser(models.Model):
         return self.user.username
     
     #create user instance upon save of AppUser object and assign it to the user property
-    @receiver(post_save, sender=User)
-    def create_user_profile(self, sender, instance, created, **kwargs):
-        if created:
-            AppUser.objects.create(user=instance)
+    # @receiver(post_save, sender=User)
+    # def create_user_profile(self, sender, instance, created, **kwargs):
+    #     if created:
+    #         AppUser.objects.create(user=instance)
 
-    @receiver(post_save, sender=User)
-    def save_user_profile(self, sender, instance, **kwargs):
-        instance.app_user.save()
+    # @receiver(post_save, sender=User)
+    # def save_user_profile(self, sender, instance, **kwargs):
+    #     instance.app_user.save()

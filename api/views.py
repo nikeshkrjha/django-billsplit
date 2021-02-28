@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from api.serializers import ExpenseSerializer, GroupSerializer, ExpenseCommentSerializer
+from api.serializers import ExpenseSerializer, GroupSerializer, ExpenseCommentSerializer, AppUserSerializer
 from billsplit.models import Expense, AppUser, Group, ExpenseComment
 from django.http import Http404
 from rest_framework.views import APIView
@@ -80,6 +80,14 @@ class GroupsList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class GroupDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Detail of a specific comment
+    """
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+
+
 class ExpenseCommentList(generics.ListCreateAPIView):
     """
     List all comments for expenses
@@ -95,3 +103,20 @@ class ExpenseCommentDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = ExpenseComment.objects.all()
     serializer_class = ExpenseCommentSerializer
+
+
+class AppUserList(generics.ListCreateAPIView):
+    """
+    List all comments for expenses
+    """
+    queryset = AppUser.objects.all()
+    serializer_class = AppUserSerializer
+    # permission_classes = [IsAdminUser]
+
+class AppUserDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Detail of a specific comment
+    """
+    queryset = AppUser.objects.all()
+    serializer_class = AppUserSerializer
+    pass
