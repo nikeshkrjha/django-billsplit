@@ -1,16 +1,20 @@
 from django.shortcuts import render
-from api.serializers import ExpenseSerializer, GroupSerializer
-from billsplit.models import Expense, AppUser, Group
+from api.serializers import ExpenseSerializer, GroupSerializer, ExpenseCommentSerializer
+from billsplit.models import Expense, AppUser, Group, ExpenseComment
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import generics
 
 # Create your views here.
+
+
 class ExpensesList(APIView):
     """
     List all expenses, or create a new expense.
     """
+
     def get(self, request, format=None):
         expenses = Expense.objects.all()
         serializer = ExpenseSerializer(expenses, many=True)
@@ -24,10 +28,12 @@ class ExpensesList(APIView):
             return Response(dict, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class ExpenseDetail(APIView):
     """
     Retrieve, update or delete a snippet instance.
     """
+
     def get_object(self, pk):
         try:
             return Expense.objects.get(pk=pk)
@@ -52,15 +58,17 @@ class ExpenseDetail(APIView):
         expense.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class GroupsList(APIView):
     """
     List all groups, or create a new group.
     """
+
     def get(self, request, format=None):
         groups = Group.objects.all()
         serializer = GroupSerializer(groups, many=True)
         # print(serializer.data[3])
-        
+
         return Response({"data": serializer.data})
 
     def post(self, request, format=None):
@@ -70,3 +78,20 @@ class GroupsList(APIView):
             dict = {"data": serializer.data}
             return Response(dict, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ExpenseCommentList(generics.ListCreateAPIView):
+    """
+    List all comments for expenses
+    """
+    queryset = ExpenseComment.objects.all()
+    serializer_class = ExpenseCommentSerializer
+    # permission_classes = [IsAdminUser]
+
+
+class ExpenseCommentDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Detail of a specific comment
+    """
+    queryset = ExpenseComment.objects.all()
+    serializer_class = ExpenseCommentSerializer

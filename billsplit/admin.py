@@ -13,8 +13,6 @@ class AppUserAdmin(admin.ModelAdmin):
     # class Meta:
     #     model
     list_display = ('user','phone_number')
-
-
 class GroupAdmin(admin.ModelAdmin):
     list_display = ('group_name', 'group_Description')
 

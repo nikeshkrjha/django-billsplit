@@ -128,3 +128,6 @@ MEDIA_URL = '/media/'
 REST_FRAMEWORK = {
     'COERCE_DECIMAL_TO_STRING': False
 }
+
+#making code timezone aware
+USE_TZ = True
