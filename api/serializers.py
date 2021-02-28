@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class ExpenseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Expense
-        fields = ['id', 'amount', 'description', 'date', 'user', 'bill_image']
+        fields = ['id', 'amount', 'description', 'date_created', 'date_modified', 'user', 'bill_image']
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,10 +25,10 @@ class GroupSerializer(serializers.ModelSerializer):
         fields = ('id','group_name', 'group_Description','members')
 
 
-class AppUserSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
-    class Meta:
-        model = AppUser
-        fields = ('id', 'user', 'phone_number')
+# class AppUserSerializer(serializers.ModelSerializer):
+#     user = UserSerializer(read_only=True)
+#     class Meta:
+#         model = AppUser
+#         fields = ('id', 'user', 'phone_number')
 
 
